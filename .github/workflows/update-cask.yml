@@ -16,22 +16,14 @@ jobs:
       - name: Update cask
         run: |
           VERSION="${{ github.event.client_payload.version }}"
-          SHA_ARM="${{ github.event.client_payload.sha256_arm64 }}"
-          SHA_X86="${{ github.event.client_payload.sha256_x86_64 }}"
+          SHA="${{ github.event.client_payload.sha256 }}"
 
-          cat > Casks/llama-panel.rb << 'RUBY'
+          cat > Casks/llama-panel.rb << RUBY
           cask "llama-panel" do
-            version "VERSION_PLACEHOLDER"
+            version "$VERSION"
 
-            on_arm do
-              url "https://github.com/AlexsJones/llama-panel/releases/download/v#{version}/llama-panel-v#{version}-macos-aarch64.tar.gz"
-              sha256 "SHA_ARM_PLACEHOLDER"
-            end
-
-            on_intel do
-              url "https://github.com/AlexsJones/llama-panel/releases/download/v#{version}/llama-panel-v#{version}-macos-x86_64.tar.gz"
-              sha256 "SHA_X86_PLACEHOLDER"
-            end
+            url "https://github.com/AlexsJones/llama-panel/releases/download/v#{version}/llama-panel-v#{version}-macos-universal.tar.gz"
+            sha256 "$SHA"
 
             name "llama-panel"
             desc "Native macOS desktop app for managing llama-server instances"
@@ -41,16 +33,12 @@ jobs:
             binary "#{appdir}/llama-panel.app/Contents/MacOS/llama-panel", target: "llama-panel"
 
             zap trash: [
-              "~/Library/Caches/com.llamapanel.app",
-              "~/Library/Preferences/com.llamapanel.app.plist",
-              "~/Library/Saved Application State/com.llamapanel.app.savedState",
+              "~/Library/Caches/com.llamapanel.desktop",
+              "~/Library/Preferences/com.llamapanel.desktop.plist",
+              "~/Library/Saved Application State/com.llamapanel.desktop.savedState",
             ]
           end
           RUBY
-
-          sed -i "s/VERSION_PLACEHOLDER/$VERSION/g" Casks/llama-panel.rb
-          sed -i "s/SHA_ARM_PLACEHOLDER/$SHA_ARM/g" Casks/llama-panel.rb
-          sed -i "s/SHA_X86_PLACEHOLDER/$SHA_X86/g" Casks/llama-panel.rb
 
       - name: Commit & push
         run: |
