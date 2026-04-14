@@ -1,8 +1,8 @@
 cask "llama-panel" do
-  version "0.8.0"
+  version "0.9.0"
 
   url "https://github.com/AlexsJones/llama-panel/releases/download/v#{version}/llama-panel-v#{version}-macos-universal.tar.gz"
-  sha256 "157295ebde788fca198cfd1dcc428211c42299148d911719cdaed8f01de08f3d"
+  sha256 "57d675e3f8ad9661a9909cf4de490a9bea77a8b8b16bbacf7d6b700813689c40"
 
   name "llama-panel"
   desc "Native macOS desktop app for managing llama-server instances"
